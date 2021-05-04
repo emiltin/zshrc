@@ -1,11 +1,21 @@
+
 # enable the default zsh completions!
 autoload -Uz compinit && compinit
+autoload -U colors && colors
 
-#prompt
-PROMPT='%B%F{245}%2~%f%b %# '		# only 1 level (working directory), in grey
+# prompt
+# show git branch on prompt, see https://arjanvandergaag.nl/blog/customize-zsh-prompt-with-vcs-info.html
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*' formats " %{$fg[blue]%}(%b)%{$reset_color%}"
+precmd() {
+  vcs_info
+}
+setopt prompt_subst
+PROMPT='%B%F{245}%2~%f%b${vcs_info_msg_0_} %# '
 
 
-# store commands in a history file
+# store commmands in a history file
 HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
 
 # limit how much history is stored in the session and the history file
